@@ -451,7 +451,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
   };
 
   const fieldClass = (fieldName) => `
-    w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition duration-200
+    w-full px-3 sm:px-4 py-2 sm:py-3 text-sm border-2 rounded-lg focus:outline-none focus:ring-2 transition duration-200
     ${errors[fieldName]
       ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
       : 'border-slate-300 focus:border-blue-600 focus:ring-blue-200'
@@ -460,24 +460,24 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="mb-6 p-8 bg-green-100 rounded-full">
-          <FiCheckCircle size={64} className="text-green-600" />
+      <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4 text-center">
+        <div className="mb-4 sm:mb-6 p-6 sm:p-8 bg-green-100 rounded-full">
+          <FiCheckCircle size={48} className="text-green-600 sm:w-16 sm:h-16" />
         </div>
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">Form Submitted Successfully!</h2>
-        <p className="text-slate-600 mb-4">The incident report has been recorded.</p>
-        <div className="bg-slate-100 rounded-lg p-6 max-w-md text-left">
-          <p className="text-sm text-slate-600 mb-2">
-            <span className="font-semibold">Ticket ID:</span> 911-{Date.now().toString().slice(-8)}
+        <h2 className="text-xl sm:text-3xl font-bold text-slate-900 mb-2">Form Submitted Successfully!</h2>
+        <p className="text-xs sm:text-base text-slate-600 mb-4">The incident report has been recorded.</p>
+        <div className="bg-slate-100 rounded-lg p-4 sm:p-6 w-full max-w-md text-left">
+          <p className="text-xs sm:text-sm text-slate-600 mb-2">
+            <span className="font-semibold">Ticket ID:</span> <span className="break-all">911-{Date.now().toString().slice(-8)}</span>
           </p>
-          <p className="text-sm text-slate-600 mb-2">
-            <span className="font-semibold">Caller:</span> {formData.callerName}
+          <p className="text-xs sm:text-sm text-slate-600 mb-2">
+            <span className="font-semibold">Caller:</span> <span className="break-words">{formData.callerName}</span>
           </p>
-          <p className="text-sm text-slate-600 mb-2">
-            <span className="font-semibold">Case Type:</span> {formData.caseNature}
+          <p className="text-xs sm:text-sm text-slate-600 mb-2">
+            <span className="font-semibold">Case Type:</span> <span className="break-words">{formData.caseNature}</span>
           </p>
-          <p className="text-sm text-slate-600">
-            <span className="font-semibold">Disposition:</span> {formData.disposition}
+          <p className="text-xs sm:text-sm text-slate-600">
+            <span className="font-semibold">Disposition:</span> <span className="break-words">{formData.disposition}</span>
           </p>
         </div>
       </div>
@@ -485,20 +485,20 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
       {/* ==================== TOP SECTION: CALLER INFO + DISPOSITION ==================== */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* LEFT: CALLER INFORMATION (2 columns) */}
-        <div className="col-span-2 border-t-4 border-blue-600 pt-6">
-          <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <FiUser size={24} className="text-blue-600" />
-            Caller Information
+        <div className="col-span-1 lg:col-span-2 border-t-4 border-blue-600 pt-4 sm:pt-6">
+          <h3 className="text-lg sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
+            <FiUser size={20} className="text-blue-600" />
+            <span>Caller Information</span>
           </h3>
 
           {/* Row 1: Name, Phone, Alt Phone */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 Caller Name *
               </label>
               <input
@@ -518,7 +518,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 Phone Number *
               </label>
               <input
@@ -538,7 +538,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 Alternative Number
               </label>
               <input
@@ -554,9 +554,9 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
           </div>
 
           {/* Row 2: KPK District, Auto Location Fetch */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 District of KPK *
               </label>
               <select
@@ -581,7 +581,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 Auto-Fetch Location
               </label>
               <button
@@ -590,7 +590,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                   const location = 'GPS Coordinates: Latitude, Longitude';
                   onUpdate({ ...formData, nearestLocation: location });
                 }}
-                className="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-200"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-200"
               >
                 📍 Fetch Location
               </button>
@@ -598,9 +598,9 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
           </div>
 
           {/* Row 3: Address, Nearest Location */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 Address *
               </label>
               <textarea
@@ -620,7 +620,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
                 Nearest Location/Landmark *
               </label>
               <textarea
@@ -642,18 +642,18 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
         </div>
 
         {/* RIGHT: DISPOSITION SECTION */}
-        <div className="border-2 border-green-300 rounded-lg overflow-hidden bg-green-50">
-          <div className="bg-green-600 text-white px-4 py-3 font-semibold">
+        <div className="col-span-1 border-2 border-green-300 rounded-lg overflow-hidden bg-green-50">
+          <div className="bg-green-600 text-white px-3 sm:px-4 py-2 sm:py-3 font-semibold text-sm sm:text-base">
             Main Disposition
           </div>
-          <div className="p-4">
+          <div className="p-3 sm:p-4">
             {/* Search Bar */}
             <input
               type="text"
               placeholder="Search disposition..."
               value={searchDisposition}
               onChange={(e) => setSearchDisposition(e.target.value)}
-              className="w-full px-3 py-2 mb-4 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              className="w-full px-3 py-2 mb-3 sm:mb-4 border-2 border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-green-500"
             />
 
             {/* Dispositions List */}
@@ -663,7 +663,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                   key={option}
                   type="button"
                   onClick={() => handleSelectChange('disposition', option)}
-                  className={`w-full text-left px-3 py-2 rounded-lg border transition text-xs font-medium ${
+                  className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs font-medium ${
                     formData.disposition === option
                       ? 'bg-green-600 text-white border-green-600'
                       : 'bg-white text-slate-700 border-slate-300 hover:border-green-400'
@@ -679,7 +679,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
               <button
                 type="button"
                 onClick={() => setShowAllDispositions(!showAllDispositions)}
-                className="w-full mt-3 px-3 py-2 bg-slate-300 hover:bg-slate-400 text-slate-700 font-semibold rounded-lg transition text-sm"
+                className="w-full mt-2 sm:mt-3 px-3 py-2 bg-slate-300 hover:bg-slate-400 text-slate-700 font-semibold rounded-lg transition text-xs sm:text-sm"
               >
                 {showAllDispositions ? 'See Less' : 'See More'}
               </button>
@@ -691,41 +691,41 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
 
       {/* ==================== CASE NATURE SECTION ==================== */}
       {activeTab && (
-        <div className="border-t-4 border-orange-600 pt-6">
-        <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-          <FiAlertTriangle size={24} className="text-orange-600" />
-          Case Nature & Details
+        <div className="border-t-4 border-orange-600 pt-4 sm:pt-6">
+        <h3 className="text-lg sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
+          <FiAlertTriangle size={20} className="text-orange-600" />
+          <span>Case Nature & Details</span>
         </h3>
 
         {/* Case Nature Selection - 3 Dropdown Boxes */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-slate-700 mb-4">
+        <div className="mb-4 sm:mb-6">
+          <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-3 sm:mb-4">
             Select Case Nature *
           </label>
           
           {/* 3 Dropdown Sections in Grid */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {/* Case Nature 1 Dropdown */}
             <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 1 ? null : 1)}
-                className="w-full px-4 py-3 bg-blue-600 text-white font-semibold hover:bg-blue-700 transition flex items-center justify-between"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-blue-600 text-white font-semibold hover:bg-blue-700 transition flex items-center justify-between"
               >
-                <span>{selectedLevel1 !== null ? caseNatureData.level1[selectedLevel1].name : 'Case Nature 1'}</span>
+                <span className="truncate">{selectedLevel1 !== null ? caseNatureData.level1[selectedLevel1].name : 'Case Nature 1'}</span>
                 <FiChevronDown 
-                  size={20} 
-                  className={`transition-transform duration-300 ${openDropdown === 1 ? 'rotate-180' : ''}`}
+                  size={18} 
+                  className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openDropdown === 1 ? 'rotate-180' : ''}`}
                 />
               </button>
               {openDropdown === 1 && (
-                <div className="p-4 bg-white">
+                <div className="p-3 sm:p-4 bg-white">
                   <input
                     type="text"
                     placeholder="Search..."
                     value={searchQuery1}
                     onChange={(e) => setSearchQuery1(e.target.value)}
-                    className="w-full px-3 py-2 mb-3 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
+                    className="w-full px-3 py-2 mb-2 sm:mb-3 border-2 border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-blue-400"
                   />
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {filteredLevel1.map((item, index) => (
@@ -740,7 +740,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                           setSearchQuery3('');
                           setOpenDropdown(null);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-lg border transition text-sm font-medium ${
+                        className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs sm:text-sm font-medium ${
                           selectedLevel1 === index
                             ? 'bg-blue-600 text-white border-blue-600'
                             : 'bg-white text-slate-700 border-slate-300 hover:border-blue-400'
@@ -760,22 +760,22 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                 type="button"
                 onClick={() => selectedLevel1 !== null && setOpenDropdown(openDropdown === 2 ? null : 2)}
                 disabled={selectedLevel1 === null}
-                className="w-full px-4 py-3 bg-orange-600 text-white font-semibold hover:bg-orange-700 transition disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-between"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-orange-600 text-white font-semibold hover:bg-orange-700 transition disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-between"
               >
-                <span>{selectedLevel2 !== null ? level2Options[selectedLevel2].name : 'Case Nature 2'}</span>
+                <span className="truncate">{selectedLevel2 !== null ? level2Options[selectedLevel2].name : 'Case Nature 2'}</span>
                 <FiChevronDown 
-                  size={20} 
-                  className={`transition-transform duration-300 ${openDropdown === 2 ? 'rotate-180' : ''}`}
+                  size={18} 
+                  className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openDropdown === 2 ? 'rotate-180' : ''}`}
                 />
               </button>
               {openDropdown === 2 && selectedLevel1 !== null && (
-                <div className="p-4 bg-white">
+                <div className="p-3 sm:p-4 bg-white">
                   <input
                     type="text"
                     placeholder="Search..."
                     value={searchQuery2}
                     onChange={(e) => setSearchQuery2(e.target.value)}
-                    className="w-full px-3 py-2 mb-3 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                    className="w-full px-3 py-2 mb-2 sm:mb-3 border-2 border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-orange-400"
                   />
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {filteredLevel2.map((item, index) => (
@@ -788,7 +788,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                           setSearchQuery3('');
                           setOpenDropdown(null);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-lg border transition text-sm font-medium ${
+                        className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs sm:text-sm font-medium ${
                           selectedLevel2 === index
                             ? 'bg-orange-600 text-white border-orange-600'
                             : 'bg-white text-slate-700 border-slate-300 hover:border-orange-400'
@@ -808,22 +808,22 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                 type="button"
                 onClick={() => (selectedLevel1 !== null && selectedLevel2 !== null) && setOpenDropdown(openDropdown === 3 ? null : 3)}
                 disabled={selectedLevel1 === null || selectedLevel2 === null}
-                className="w-full px-4 py-3 bg-green-600 text-white font-semibold hover:bg-green-700 transition disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-between"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-green-600 text-white font-semibold hover:bg-green-700 transition disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-between"
               >
-                <span>{formData.caseNature ? formData.caseNature : 'Case Nature 3'}</span>
+                <span className="truncate">{formData.caseNature ? formData.caseNature : 'Case Nature 3'}</span>
                 <FiChevronDown 
-                  size={20} 
-                  className={`transition-transform duration-300 ${openDropdown === 3 ? 'rotate-180' : ''}`}
+                  size={18} 
+                  className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openDropdown === 3 ? 'rotate-180' : ''}`}
                 />
               </button>
               {openDropdown === 3 && selectedLevel1 !== null && selectedLevel2 !== null && (
-                <div className="p-4 bg-white">
+                <div className="p-3 sm:p-4 bg-white">
                   <input
                     type="text"
                     placeholder="Search..."
                     value={searchQuery3}
                     onChange={(e) => setSearchQuery3(e.target.value)}
-                    className="w-full px-3 py-2 mb-3 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:border-green-400"
+                    className="w-full px-3 py-2 mb-2 sm:mb-3 border-2 border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-green-400"
                   />
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {filteredLevel3.map((option) => (
@@ -835,7 +835,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                           setSearchQuery3('');
                           setOpenDropdown(null);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-lg border transition text-sm font-medium ${
+                        className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs sm:text-sm font-medium ${
                           formData.caseNature === option
                             ? 'bg-green-600 text-white border-green-600'
                             : 'bg-white text-slate-700 border-slate-300 hover:border-green-400'
@@ -852,8 +852,8 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
 
           {/* Selected Value Display */}
           {formData.caseNature && (
-            <div className="mt-4 p-3 bg-green-50 border-2 border-green-200 rounded-lg">
-              <p className="text-sm">
+            <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border-2 border-green-200 rounded-lg">
+              <p className="text-xs sm:text-sm">
                 <span className="font-semibold text-slate-700">Selected: </span>
                 <span className="text-green-700 font-semibold">{formData.caseNature}</span>
               </p>
@@ -861,15 +861,15 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
           )}
 
           {errors.caseNature && (
-            <p className="mt-3 flex items-center gap-1 text-sm text-red-600">
-              <FiAlertCircle size={16} /> {errors.caseNature}
+            <p className="mt-2 sm:mt-3 flex items-center gap-1 text-xs sm:text-sm text-red-600">
+              <FiAlertCircle size={14} /> {errors.caseNature}
             </p>
           )}
         </div>
 
         {/* Incident Description */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-slate-700 mb-2">
+        <div className="mb-4 sm:mb-6">
+          <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
             Comment *
           </label>
           <textarea
@@ -892,9 +892,9 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
       {/* End Case Nature Section */}
 
       {/* Summary Section */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-        <h4 className="font-semibold text-slate-900 mb-4">Incident Summary</h4>
-        <div className="grid grid-cols-2 gap-6 text-sm text-slate-700">
+      <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 sm:p-6">
+        <h4 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">Incident Summary</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 text-xs sm:text-sm text-slate-700">
           <div>
             <p><span className="font-semibold">Caller:</span> {formData.callerName || 'N/A'}</p>
             <p><span className="font-semibold">Phone:</span> {formData.callerNumber || 'N/A'}</p>
@@ -908,11 +908,11 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
       </div>
 
       {/* Submit Button */}
-      <div className="flex justify-end gap-4 pt-6 border-t">
+      <div className="flex justify-center sm:justify-end gap-3 sm:gap-4 pt-4 sm:pt-6 border-t">
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-8 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed text-lg"
+          className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 sm:py-4 px-4 sm:px-8 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed text-sm sm:text-base"
         >
           {isLoading ? 'Submitting...' : 'Submit Ticket'}
         </button>

@@ -102,22 +102,24 @@ const FormPage = () => {
 
   // Show main form
   return (
-    <div className="flex h-screen bg-slate-50">
-      {/* Right Sidebar */}
+    <div className="flex flex-col lg:flex-row min-h-screen bg-slate-50">
+      {/* Sidebar - Horizontal on mobile, vertical on lg+ */}
       <AgentSidebar agentName={agentName} onLogout={handleLogout} />
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto p-8">
+      <div className="flex-1 overflow-auto w-full">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">911 Emergency Call Form</h1>
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-2">911 Emergency Call Form</h1>
             {activeTab ? (
-              <p className="text-slate-600">
-                Department: <span className="font-semibold">{activeTab}</span> | Agent: <span className="font-semibold">{agentName}</span>
+              <p className="text-xs sm:text-sm text-slate-600">
+                <span className="block sm:inline">Department: <span className="font-semibold">{activeTab}</span></span>
+                <span className="hidden sm:inline"> | </span>
+                <span className="block sm:inline">Agent: <span className="font-semibold">{agentName}</span></span>
               </p>
             ) : (
-              <p className="text-slate-600">Please select a department to begin</p>
+              <p className="text-sm text-slate-600">Please select a department to begin</p>
             )}
           </div>
 
@@ -130,7 +132,7 @@ const FormPage = () => {
           />
 
           {/* Unified Form - All Sections in One Page */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
             <UnifiedForm
               formData={formData}
               onUpdate={handleFormUpdate}
