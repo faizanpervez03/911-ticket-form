@@ -23,14 +23,14 @@ const AgentNameInput = ({ onSubmit, isLoading = false }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Welcome to 911 Form</h2>
-        <p className="text-slate-600 mb-6">Please enter your name to begin taking calls</p>
+    <div className="w-full sm:max-w-md sm:mx-auto px-4  sm:px-0 py-4 sm:py-8 h-screen sm:h-auto flex items-center sm:items-center justify-center sm:justify-center">
+      <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 w-full">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Welcome to 911 Form</h2>
+        <p className="text-xs sm:text-sm text-slate-600 mb-4 sm:mb-6">Please enter your name to begin taking calls</p>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
+          <div className="mb-4 sm:mb-6">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
               Agent Name
             </label>
             <input
@@ -41,28 +41,28 @@ const AgentNameInput = ({ onSubmit, isLoading = false }) => {
                 setError('');
               }}
               placeholder="Enter your full name"
-              className="w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-200 transition duration-200"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-200 transition duration-200"
               disabled={isLoading}
             />
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <FiAlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-              <p className="text-red-700 text-sm">{error}</p>
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2 sm:gap-3">
+              <FiAlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={18} />
+              <p className="text-red-700 text-xs sm:text-sm">{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed text-sm sm:text-base"
           >
             {isLoading ? 'Loading...' : 'Start Taking Calls'}
           </button>
         </form>
 
-        <p className="text-xs text-slate-500 mt-6 text-center">
+        <p className="text-xs text-slate-500 mt-4 sm:mt-6 text-center">
           All calls will be logged with your name for accountability and quality assurance
         </p>
       </div>

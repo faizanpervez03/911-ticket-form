@@ -45,7 +45,7 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
   };
 
   const fieldClass = (fieldName) => `
-    w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition duration-200
+    w-full px-3 sm:px-4 py-2 sm:py-3 border-2 rounded-lg text-sm focus:outline-none focus:ring-2 transition duration-200
     ${errors[fieldName]
       ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
       : 'border-slate-300 focus:border-blue-600 focus:ring-blue-200'
@@ -53,11 +53,11 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
   `;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
       {/* Caller Name */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-          <FiUser size={18} className="text-blue-600" />
+        <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+          <FiUser size={16} className="sm:w-5 sm:h-5" />
           Caller Name *
         </label>
         <input
@@ -70,16 +70,16 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
           disabled={isLoading}
         />
         {errors.callerName && (
-          <p className="mt-2 flex items-center gap-1 text-sm text-red-600">
-            <FiAlertCircle size={16} /> {errors.callerName}
+          <p className="mt-1 sm:mt-2 flex items-center gap-1 text-xs sm:text-sm text-red-600">
+            <FiAlertCircle size={14} /> {errors.callerName}
           </p>
         )}
       </div>
 
       {/* Phone Number */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-          <FiPhone size={18} className="text-blue-600" />
+        <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+          <FiPhone size={16} className="sm:w-5 sm:h-5" />
           Phone Number *
         </label>
         <input
@@ -92,16 +92,16 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
           disabled={isLoading}
         />
         {errors.callerNumber && (
-          <p className="mt-2 flex items-center gap-1 text-sm text-red-600">
-            <FiAlertCircle size={16} /> {errors.callerNumber}
+          <p className="mt-1 sm:mt-2 flex items-center gap-1 text-xs sm:text-sm text-red-600">
+            <FiAlertCircle size={14} /> {errors.callerNumber}
           </p>
         )}
       </div>
 
       {/* Alternative Number */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-          <FiPhone size={18} className="text-blue-600" />
+        <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+          <FiPhone size={16} className="sm:w-5 sm:h-5" />
           Alternative Number (Optional)
         </label>
         <input
@@ -117,8 +117,8 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
 
       {/* Address */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-          <FiMapPin size={18} className="text-blue-600" />
+        <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+          <FiMapPin size={16} className="sm:w-5 sm:h-5" />
           Address *
         </label>
         <textarea
@@ -131,16 +131,16 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
           disabled={isLoading}
         />
         {errors.address && (
-          <p className="mt-2 flex items-center gap-1 text-sm text-red-600">
-            <FiAlertCircle size={16} /> {errors.address}
+          <p className="mt-1 sm:mt-2 flex items-center gap-1 text-xs sm:text-sm text-red-600">
+            <FiAlertCircle size={14} /> {errors.address}
           </p>
         )}
       </div>
 
       {/* Nearest Location */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-          <FiMapPin size={18} className="text-blue-600" />
+        <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+          <FiMapPin size={16} className="sm:w-5 sm:h-5" />
           Nearest Location/Landmark *
         </label>
         <input
@@ -153,8 +153,8 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
           disabled={isLoading}
         />
         {errors.nearestLocation && (
-          <p className="mt-2 flex items-center gap-1 text-sm text-red-600">
-            <FiAlertCircle size={16} /> {errors.nearestLocation}
+          <p className="mt-1 sm:mt-2 flex items-center gap-1 text-xs sm:text-sm text-red-600">
+            <FiAlertCircle size={14} /> {errors.nearestLocation}
           </p>
         )}
       </div>
@@ -163,7 +163,7 @@ const CallInfoForm = ({ formData, onUpdate, onNext, isLoading = false }) => {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed mt-8"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed mt-6 sm:mt-8 text-sm sm:text-base"
       >
         {isLoading ? 'Processing...' : 'Next: Case Nature'}
       </button>

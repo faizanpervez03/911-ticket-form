@@ -3,12 +3,12 @@ import { FiCheck, FiChevronRight } from 'react-icons/fi';
 
 const FormStepper = ({ currentStep, totalSteps, steps }) => {
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex items-center justify-between mb-6 sm:mb-8 flex-wrap sm:flex-nowrap gap-2 sm:gap-0">
       {steps.map((step, index) => (
         <React.Fragment key={index}>
           <div className="flex flex-col items-center">
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm transition duration-300 ${
+              className={`w-8 sm:w-12 h-8 sm:h-12 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition duration-300 ${
                 index < currentStep - 1
                   ? 'bg-green-500 text-white'
                   : index === currentStep - 1
@@ -17,19 +17,19 @@ const FormStepper = ({ currentStep, totalSteps, steps }) => {
               }`}
             >
               {index < currentStep - 1 ? (
-                <FiCheck size={24} />
+                <FiCheck size={16} className="sm:block" />
               ) : (
-                <span>{index + 1}</span>
+                <span className="text-xs sm:text-base">{index + 1}</span>
               )}
             </div>
-            <p className={`mt-2 text-sm font-medium ${
+            <p className={`mt-1 sm:mt-2 text-xs sm:text-sm font-medium ${
               index <= currentStep - 1 ? 'text-slate-900' : 'text-slate-500'
             }`}>
               {step}
             </p>
           </div>
           {index < steps.length - 1 && (
-            <div className={`flex-1 h-1 mx-4 rounded-full transition duration-300 ${
+            <div className={`flex-1 h-1 mx-1 sm:mx-4 rounded-full transition duration-300 ${
               index < currentStep - 1 ? 'bg-green-500' : 'bg-slate-200'
             }`}></div>
           )}
