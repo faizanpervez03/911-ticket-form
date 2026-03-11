@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiUser, FiPhone, FiMapPin, FiAlertTriangle, FiCheckCircle, FiAlertCircle, FiChevronDown } from 'react-icons/fi';
 
-const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTab = 'Police' }) => {
+const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTab = 'Police', onCallerInfoUpdate, isMultiDepartment = false, departmentCount = 1 }) => {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(null);
@@ -13,6 +13,8 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
   const [openDropdown, setOpenDropdown] = useState(null);
   const [searchDisposition, setSearchDisposition] = useState('');
   const [showAllDispositions, setShowAllDispositions] = useState(false);
+  const [searchPoliceStation, setSearchPoliceStation] = useState('');
+  const [openPoliceStationDropdown, setOpenPoliceStationDropdown] = useState(false);
 
   // KPK Districts
   const kpkDistricts = [
@@ -40,18 +42,53 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
     'Upper Dir',
   ];
 
+  // KPK Police Stations
+  const kpkPoliceStations = [
+    'Abbottabad City Police Station',
+    'Abbottabad Cantonment Police Station',
+    'Bannu City Police Station',
+    'Bannu Cantonment Police Station',
+    'Buner City Police Station',
+    'Charsadda City Police Station',
+    'Charsadda Cantonment Police Station',
+    'Chitral City Police Station',
+    'Dera Ismail Khan City Police Station',
+    'Dera Ismail Khan Cantonment Police Station',
+    'Hangu City Police Station',
+    'Haripur City Police Station',
+    'Kohat City Police Station',
+    'Kohat Cantonment Police Station',
+    'Mardan City Police Station',
+    'Mardan Cantonment Police Station',
+    'Nowshera City Police Station',
+    'Nowshera Cantonment Police Station',
+    'Peshawar City Police Station',
+    'Peshawar Cantonment Police Station',
+    'Peshawar Sadar Police Station',
+    'Peshawar Pipal Mandi Police Station',
+    'Sawat City Police Station',
+    'Swabi City Police Station',
+    'Swabi Cantonment Police Station',
+    'Wazirabad Police Station',
+  ];
+
+  // Filter police stations based on search
+  const filteredPoliceStations = kpkPoliceStations.filter(station =>
+    station.toLowerCase().includes(searchPoliceStation.toLowerCase())
+  );
+
   // All Disposition Options
   const allDispositionOptions = [
+    'Prank Call',
+    'No Voice',
+    'Complete Call',
+    'Case Follow Up',
     'Abusive Call',
     'Call Drop',
-    'Case Follow Up',
-    'Complete Call',
     'Distortion Call',
     'Test Call',
     'Information Call',
-    'No Voice',
     'Other Helpline Related Info',
-    'Prank Call',
     'Scheduled Call Back',
     'Transfer Call'
   ];
@@ -368,8 +405,38 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
     item.toLowerCase().includes(searchQuery3.toLowerCase())
   );
 
+  // Get all level 3 options from all categories (for direct selection)
+  const getAllLevel3Options = () => {
+    const allLevel3 = [];
+    caseNatureData.level1.forEach((l1) => {
+      l1.level2.forEach((l2) => {
+        l2.level3.forEach((l3) => {
+          allLevel3.push(l3);
+        });
+      });
+    });
+    return allLevel3;
+  };
+
+  const allLevel3Options = getAllLevel3Options();
+  const filteredAllLevel3 = allLevel3Options.filter(item =>
+    item.toLowerCase().includes(searchQuery3.toLowerCase())
+  );
+
+  // Find which level 1 and 2 a level 3 selection corresponds to (for reverse mapping)
+  const findCategoryPath = (selectedValue) => {
+    for (let l1Idx = 0; l1Idx < caseNatureData.level1.length; l1Idx++) {
+      for (let l2Idx = 0; l2Idx < caseNatureData.level1[l1Idx].level2.length; l2Idx++) {
+        if (caseNatureData.level1[l1Idx].level2[l2Idx].level3.includes(selectedValue)) {
+          return { l1Idx, l2Idx };
+        }
+      }
+    }
+    return null;
+  };
+
   const dispositionOptions = [
-    'Abusive Call',
+    
     'Call Drop',
     'Case Follow Up',
     'Complete Call',
@@ -380,19 +447,46 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
     'Other Helpline Related Info',
     'Prank Call',
     'Scheduled Call Back',
-    'Transfer Call'
+    'Transfer Call',
+    'Abusive Call',
   ];
+
+  // Fields that belong to caller info (shared across departments)
+  const callerInfoFields = ['callerName', 'callerNumber', 'alternativeNumber', 'district', 'address', 'nearestLocation'];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onUpdate({ ...formData, [name]: value });
+    
+    // Route caller info updates to onCallerInfoUpdate if available
+    if (callerInfoFields.includes(name) && onCallerInfoUpdate) {
+      // Extract only caller info fields from formData
+      const callerInfoOnly = callerInfoFields.reduce((acc, field) => {
+        acc[field] = field === name ? value : (formData[field] || '');
+        return acc;
+      }, {});
+      onCallerInfoUpdate(callerInfoOnly);
+    } else {
+      onUpdate({ ...formData, [name]: value });
+    }
+    
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
     }
   };
 
   const handleSelectChange = (fieldName, value) => {
-    onUpdate({ ...formData, [fieldName]: value });
+    // Route caller info updates to onCallerInfoUpdate if available
+    if (callerInfoFields.includes(fieldName) && onCallerInfoUpdate) {
+      // Extract only caller info fields from formData
+      const callerInfoOnly = callerInfoFields.reduce((acc, field) => {
+        acc[field] = field === fieldName ? value : (formData[field] || '');
+        return acc;
+      }, {});
+      onCallerInfoUpdate(callerInfoOnly);
+    } else {
+      onUpdate({ ...formData, [fieldName]: value });
+    }
+    
     if (errors[fieldName]) {
       setErrors({ ...errors, [fieldName]: '' });
     }
@@ -588,7 +682,15 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                 type="button"
                 onClick={() => {
                   const location = 'GPS Coordinates: Latitude, Longitude';
-                  onUpdate({ ...formData, nearestLocation: location });
+                  if (onCallerInfoUpdate) {
+                    const callerInfoOnly = callerInfoFields.reduce((acc, field) => {
+                      acc[field] = field === 'nearestLocation' ? location : (formData[field] || '');
+                      return acc;
+                    }, {});
+                    onCallerInfoUpdate(callerInfoOnly);
+                  } else {
+                    onUpdate({ ...formData, nearestLocation: location });
+                  }
                 }}
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-200"
               >
@@ -639,6 +741,45 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
               )}
             </div>
           </div>
+
+          {/* Row 4: Department-Specific Fields */}
+          {(activeTab === 'Police' || activeTab === 'NHMA') && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+                  Suspect Detail
+                </label>
+                <input
+                  type="number"
+                  name="suspectDetail"
+                  value={formData.suspectDetail || ''}
+                  onChange={handleChange}
+                  placeholder="Enter suspect detail number"
+                  className={fieldClass('suspectDetail')}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+          )}
+
+          {(activeTab === 'PDMA' || activeTab === 'Rescue') && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+                  Victim Number
+                </label>
+                <input
+                  type="number"
+                  name="victimNumber"
+                  value={formData.victimNumber || ''}
+                  onChange={handleChange}
+                  placeholder="Enter victim number"
+                  className={fieldClass('victimNumber')}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* RIGHT: DISPOSITION SECTION */}
@@ -693,7 +834,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
       {activeTab && (
         <div className="border-t-4 border-orange-600 pt-4 sm:pt-6">
         <h3 className="text-lg sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
-          <FiAlertTriangle size={20} className="text-orange-600" />
+          {/* <FiAlertTriangle size={20} className="text-orange-600" /> */}
           <span>Case Nature & Details</span>
         </h3>
 
@@ -706,20 +847,30 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
           {/* 3 Dropdown Sections in Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {/* Case Nature 1 Dropdown */}
-            <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
+            <div className={`border-2 rounded-lg overflow-hidden ${selectedLevel1 !== null ? 'border-blue-500 shadow-md' : 'border-slate-300'}`}>
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 1 ? null : 1)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-blue-600 text-white font-semibold hover:bg-blue-700 transition flex items-center justify-between"
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-semibold hover:bg-blue-700 transition flex items-center justify-between ${
+                  selectedLevel1 !== null
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-blue-600 text-white'
+                }`}
               >
-                <span className="truncate">{selectedLevel1 !== null ? caseNatureData.level1[selectedLevel1].name : 'Case Nature 1'}</span>
+                <span className="truncate">
+                  {selectedLevel1 !== null ? (
+                    <span className="font-bold">✓ {caseNatureData.level1[selectedLevel1].name}</span>
+                  ) : (
+                    'Level 1: Category'
+                  )}
+                </span>
                 <FiChevronDown 
                   size={18} 
                   className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openDropdown === 1 ? 'rotate-180' : ''}`}
                 />
               </button>
               {openDropdown === 1 && (
-                <div className="p-3 sm:p-4 bg-white">
+                <div className="p-3 sm:p-4 bg-white border-t-2 border-slate-200">
                   <input
                     type="text"
                     placeholder="Search..."
@@ -742,11 +893,11 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                         }}
                         className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs sm:text-sm font-medium ${
                           selectedLevel1 === index
-                            ? 'bg-blue-600 text-white border-blue-600'
+                            ? 'bg-blue-600 text-white border-blue-600 font-bold'
                             : 'bg-white text-slate-700 border-slate-300 hover:border-blue-400'
                         }`}
                       >
-                        {item.name}
+                        {selectedLevel1 === index && '✓ '}{item.name}
                       </button>
                     ))}
                   </div>
@@ -755,21 +906,34 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
 
             {/* Case Nature 2 Dropdown */}
-            <div className={`border-2 rounded-lg overflow-hidden ${selectedLevel1 !== null ? 'border-slate-300' : 'border-slate-200 opacity-50'}`}>
+            <div className={`border-2 rounded-lg overflow-hidden ${selectedLevel2 !== null ? 'border-orange-500 shadow-md' : selectedLevel1 !== null ? 'border-slate-300' : 'border-slate-300'}`}>
               <button
                 type="button"
-                onClick={() => selectedLevel1 !== null && setOpenDropdown(openDropdown === 2 ? null : 2)}
-                disabled={selectedLevel1 === null}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-orange-600 text-white font-semibold hover:bg-orange-700 transition disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-between"
+                onClick={() => setOpenDropdown(openDropdown === 2 ? null : 2)}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-semibold transition flex items-center justify-between ${
+                  selectedLevel2 !== null
+                    ? 'bg-orange-600 text-white hover:bg-orange-700'
+                    : selectedLevel1 !== null
+                    ? 'bg-orange-600 text-white hover:bg-orange-700'
+                    : 'bg-orange-500 text-white hover:bg-orange-600'
+                }`}
               >
-                <span className="truncate">{selectedLevel2 !== null ? level2Options[selectedLevel2].name : 'Case Nature 2'}</span>
+                <span className="truncate">
+                  {selectedLevel2 !== null ? (
+                    <span className="font-bold">✓ {level2Options[selectedLevel2].name}</span>
+                  ) : selectedLevel1 !== null ? (
+                    'Level 2: Type'
+                  ) : (
+                    'Level 2: Type (Optional)'
+                  )}
+                </span>
                 <FiChevronDown 
                   size={18} 
                   className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openDropdown === 2 ? 'rotate-180' : ''}`}
                 />
               </button>
               {openDropdown === 2 && selectedLevel1 !== null && (
-                <div className="p-3 sm:p-4 bg-white">
+                <div className="p-3 sm:p-4 bg-white border-t-2 border-slate-200">
                   <input
                     type="text"
                     placeholder="Search..."
@@ -790,11 +954,11 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                         }}
                         className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs sm:text-sm font-medium ${
                           selectedLevel2 === index
-                            ? 'bg-orange-600 text-white border-orange-600'
+                            ? 'bg-orange-600 text-white border-orange-600 font-bold'
                             : 'bg-white text-slate-700 border-slate-300 hover:border-orange-400'
                         }`}
                       >
-                        {item.name}
+                        {selectedLevel2 === index && '✓ '}{item.name}
                       </button>
                     ))}
                   </div>
@@ -803,21 +967,30 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
 
             {/* Case Nature 3 Dropdown */}
-            <div className={`border-2 rounded-lg overflow-hidden ${selectedLevel1 !== null && selectedLevel2 !== null ? 'border-slate-300' : 'border-slate-200 opacity-50'}`}>
+            <div className={`border-2 rounded-lg overflow-hidden ${formData.caseNature ? 'border-green-500 shadow-md' : 'border-slate-300'}`}>
               <button
                 type="button"
-                onClick={() => (selectedLevel1 !== null && selectedLevel2 !== null) && setOpenDropdown(openDropdown === 3 ? null : 3)}
-                disabled={selectedLevel1 === null || selectedLevel2 === null}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-green-600 text-white font-semibold hover:bg-green-700 transition disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-between"
+                onClick={() => setOpenDropdown(openDropdown === 3 ? null : 3)}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-semibold transition flex items-center justify-between ${
+                  formData.caseNature
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
               >
-                <span className="truncate">{formData.caseNature ? formData.caseNature : 'Case Nature 3'}</span>
+                <span className="truncate">
+                  {formData.caseNature ? (
+                    <span className="font-bold">✓ {formData.caseNature}</span>
+                  ) : (
+                    'Level 3: Select Case'
+                  )}
+                </span>
                 <FiChevronDown 
                   size={18} 
                   className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openDropdown === 3 ? 'rotate-180' : ''}`}
                 />
               </button>
-              {openDropdown === 3 && selectedLevel1 !== null && selectedLevel2 !== null && (
-                <div className="p-3 sm:p-4 bg-white">
+              {openDropdown === 3 && (
+                <div className="p-3 sm:p-4 bg-white border-t-2 border-slate-200">
                   <input
                     type="text"
                     placeholder="Search..."
@@ -826,22 +999,27 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
                     className="w-full px-3 py-2 mb-2 sm:mb-3 border-2 border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-green-400"
                   />
                   <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {filteredLevel3.map((option) => (
+                    {filteredAllLevel3.map((option) => (
                       <button
                         key={option}
                         type="button"
                         onClick={() => {
+                          const path = findCategoryPath(option);
+                          if (path) {
+                            setSelectedLevel1(path.l1Idx);
+                            setSelectedLevel2(path.l2Idx);
+                          }
                           handleSelectChange('caseNature', option);
                           setSearchQuery3('');
                           setOpenDropdown(null);
                         }}
                         className={`w-full text-left px-2 sm:px-3 py-2 rounded-lg border transition text-xs sm:text-sm font-medium ${
                           formData.caseNature === option
-                            ? 'bg-green-600 text-white border-green-600'
+                            ? 'bg-green-600 text-white border-green-600 font-bold'
                             : 'bg-white text-slate-700 border-slate-300 hover:border-green-400'
                         }`}
                       >
-                        {option}
+                        {formData.caseNature === option && '✓ '}{option}
                       </button>
                     ))}
                   </div>
@@ -850,13 +1028,26 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </div>
           </div>
 
-          {/* Selected Value Display */}
+          {/* Selected Value Display - Full Hierarchy Path */}
           {formData.caseNature && (
-            <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border-2 border-green-200 rounded-lg">
-              <p className="text-xs sm:text-sm">
-                <span className="font-semibold text-slate-700">Selected: </span>
-                <span className="text-green-700 font-semibold">{formData.caseNature}</span>
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-green-50 border-2 border-green-400 rounded-lg shadow-md">
+              <p className="text-xs sm:text-sm mb-2">
+                <span className="font-bold text-green-800">✓ Full Hierarchy Selected:</span>
               </p>
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-xs sm:text-sm text-slate-700">
+                  <span className="inline-block bg-blue-100 px-2 py-1 rounded font-semibold text-blue-800">Level 1:</span>
+                  <span className="ml-2 font-bold text-blue-700">{selectedLevel1 !== null && caseNatureData.level1[selectedLevel1].name}</span>
+                </p>
+                <p className="text-xs sm:text-sm text-slate-700">
+                  <span className="inline-block bg-orange-100 px-2 py-1 rounded font-semibold text-orange-800">Level 2:</span>
+                  <span className="ml-2 font-bold text-orange-700">{selectedLevel2 !== null && level2Options[selectedLevel2].name}</span>
+                </p>
+                <p className="text-xs sm:text-sm text-slate-700">
+                  <span className="inline-block bg-green-100 px-2 py-1 rounded font-semibold text-green-800">Level 3:</span>
+                  <span className="ml-2 font-bold text-green-700">{formData.caseNature}</span>
+                </p>
+              </div>
             </div>
           )}
 
@@ -866,6 +1057,73 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             </p>
           )}
         </div>
+
+        {/* Police Station - Police Department Only */}
+        {activeTab === 'Police' && (
+          <div className="mb-4 sm:mb-6">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+              Police Station
+            </label>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setOpenPoliceStationDropdown(!openPoliceStationDropdown)}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm border-2 border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 hover:border-blue-400 transition bg-white text-left flex items-center justify-between"
+              >
+                <span className="truncate">
+                  {formData.policeStation ? (
+                    <span className="font-medium text-slate-800">✓ {formData.policeStation}</span>
+                  ) : (
+                    <span className="text-slate-500">Select a police station</span>
+                  )}
+                </span>
+                <FiChevronDown 
+                  size={18} 
+                  className={`transition-transform duration-300 flex-shrink-0 ml-2 ${openPoliceStationDropdown ? 'rotate-180' : ''}`}
+                />
+              </button>
+              
+              {openPoliceStationDropdown && (
+                <div className="absolute z-50 w-full mt-1 bg-white border-2 border-slate-300 rounded-lg shadow-lg">
+                  <input
+                    type="text"
+                    placeholder="Search police station..."
+                    value={searchPoliceStation}
+                    onChange={(e) => setSearchPoliceStation(e.target.value)}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-b-2 border-slate-300 rounded-t-lg text-xs sm:text-sm focus:outline-none focus:border-blue-400"
+                    autoFocus
+                  />
+                  <div className="max-h-64 overflow-y-auto">
+                    {filteredPoliceStations.length > 0 ? (
+                      filteredPoliceStations.map((station) => (
+                        <button
+                          key={station}
+                          type="button"
+                          onClick={() => {
+                            handleSelectChange('policeStation', station);
+                            setOpenPoliceStationDropdown(false);
+                            setSearchPoliceStation('');
+                          }}
+                          className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 border-b border-slate-200 hover:bg-blue-50 transition text-xs sm:text-sm ${
+                            formData.policeStation === station
+                              ? 'bg-blue-100 text-blue-900 font-semibold'
+                              : 'text-slate-700'
+                          }`}
+                        >
+                          {formData.policeStation === station && '✓ '}{station}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-3 sm:px-4 py-3 text-xs sm:text-sm text-slate-500 text-center">
+                        No police stations found
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Incident Description */}
         <div className="mb-4 sm:mb-6">
@@ -892,7 +1150,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
       {/* End Case Nature Section */}
 
       {/* Summary Section */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 sm:p-6">
+      {/* <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 sm:p-6">
         <h4 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">Incident Summary</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 text-xs sm:text-sm text-slate-700">
           <div>
@@ -905,7 +1163,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
             <p><span className="font-semibold">Disposition:</span> {formData.disposition || 'N/A'}</p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Submit Button */}
       <div className="flex justify-center sm:justify-end gap-3 sm:gap-4 pt-4 sm:pt-6 border-t">
@@ -914,7 +1172,7 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
           disabled={isLoading}
           className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2 sm:py-4 px-4 sm:px-8 rounded-lg transition duration-200 disabled:bg-slate-400 disabled:cursor-not-allowed text-sm sm:text-base"
         >
-          {isLoading ? 'Submitting...' : 'Submit Ticket'}
+          {isLoading ? 'Saving...' : 'Submit Ticket'}
         </button>
       </div>
     </form>

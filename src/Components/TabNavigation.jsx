@@ -6,7 +6,7 @@ const TabNavigation = ({ activeTab, onTabChange, tabs, disabled = false }) => {
     Police: FiShield,
     Rescue: FiTruck,
     PDMA: FiAlertTriangle,
-    NHMA: FiHome,
+    NHMP: FiHome,
     Bolo: FiList,
   };
 

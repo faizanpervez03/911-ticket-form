@@ -23,8 +23,7 @@ const AgentNameInput = ({ onSubmit, isLoading = false }) => {
   };
 
   return (
-    <div className="w-full sm:max-w-md sm:mx-auto px-4  sm:px-0 py-4 sm:py-8 h-screen sm:h-auto flex items-center sm:items-center justify-center sm:justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 w-full">
+    <div className="w-full sm:max-w-md sm:mx-auto px-4  sm:px-0 py-4 sm:py-8 h-screen sm:h-auto flex items-center sm:items-center justify-center sm:justify-center">     <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8 w-full">
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">Welcome to 911 Form</h2>
         <p className="text-xs sm:text-sm text-slate-600 mb-4 sm:mb-6">Please enter your name to begin taking calls</p>
 
