@@ -482,7 +482,7 @@ const FormPage = () => {
                     />
 
                     <div className="space-y-2">
-                      {['Abusive Call', 'Call Drop', 'Case Follow Up', 'Complete Call'].map((option) => (
+                      {['Prank Call', 'No Voice Call', 'Complete Call', 'Case Follow Up'].map((option) => (
                         <button
                           key={option}
                           type="button"

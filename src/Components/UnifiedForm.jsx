@@ -436,19 +436,18 @@ const UnifiedForm = ({ formData, onUpdate, onSubmit, isLoading = false, activeTa
   };
 
   const dispositionOptions = [
-    
-    'Call Drop',
-    'Case Follow Up',
+    'Prank Call',
+    'No Voice',
     'Complete Call',
+    'Case Follow Up',
+    'Abusive Call',
+    'Call Drop',
     'Distortion Call',
     'Test Call',
     'Information Call',
-    'No Voice',
     'Other Helpline Related Info',
-    'Prank Call',
     'Scheduled Call Back',
     'Transfer Call',
-    'Abusive Call',
   ];
 
   // Fields that belong to caller info (shared across departments)
